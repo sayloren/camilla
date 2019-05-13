@@ -34,4 +34,8 @@ python -m nn
 python -m pytest
 ```
 
-![a](/images/Learningrate-error.png)
+##### Graphs for 838
+![a](/images/Learningrate-error-auto.png)
+
+##### Graphs for Seq Weight/Bias relations over Epochs
+![a](/images/Weights-biases-seq.png)
