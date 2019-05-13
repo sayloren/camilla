@@ -36,7 +36,7 @@ def reverse_binary_dictionary(sequence):
     list_str = [str(i) for i in sequence]
     join_str = "".join(list_str)
     parse_str = [join_str[0+i:4+i] for i in range(0, len(join_str), 4)]
-    return "".join([binDict[i] for i in parse_str])
+    return ''.join([binDict[i] for i in parse_str])
 
 def test_sequence_encoding():
     '''
@@ -50,9 +50,10 @@ def test_sequence_encoding():
         'yeast-upstream-1k-negative.fa',
         'rap1-lieb-test.txt')
 
-    seq_hold['reverse_binary'] = [reverse_binary_dictionary(seq) for seq in seq_hold['sequence']]
-    seq_hold['tf']=seq_hold['sequence']==seq_hold['rev_binary']
-    assert seq_hold['tf'].all() == True
+    top_seq = seq_hold.head()
+    top_seq['reverse_binary'] = [reverse_binary_dictionary(seq) for seq in top_seq['sequence']]
+    top_seq['tf']=top_seq['sequence']==top_seq['rev_binary']
+    assert top_seq['tf'].all() == True
 
 if __name__ == "__main__":
     main()
