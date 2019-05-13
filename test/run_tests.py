@@ -22,5 +22,5 @@ def run_auto_encoder():
     print('predicted is {0}'.format(evaluate_identity(y,prediction[-1])))
 
      # check that the matrix indeces are the same
-     assert np.argmax(outputs) == np.argmax(y)
+     assert np.argmax(prediction[-1]) == np.argmax(y)
      return
