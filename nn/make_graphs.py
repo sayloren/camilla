@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.gridspec as gridspec
 
+def get_args():
+    parser = argparse.ArgumentParser(description="Description")
+    return parser.parse_args()
 
-def graph_learning_rate(epochs,error):
+def main(epochs,error):
     '''
     make line plots for the learning rate x epochs
     '''
@@ -51,3 +54,6 @@ def graph_learning_rate(epochs,error):
     outdir.mkdir(parents=True, exist_ok=True)
     plt.savefig(str(outfile),format='png')
     plt.close()
+
+if __name__ == "__main__":
+    main()

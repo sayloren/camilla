@@ -5,6 +5,10 @@ from read_data import collect_datasets
 from make_network import NeuralNetwork
 from make_graphs import graph_learning_rate
 
+def get_args():
+    parser = argparse.ArgumentParser(description="Description")
+    return parser.parse_args()
+
 def evaluate_identity(y,p):
     '''
     '''
@@ -75,4 +79,4 @@ def main():
     pd_params.to_csv('params.txt',sep='\t',header=True,index=False)
 
 if __name__ == "__main__":
-	main()
+    main()
