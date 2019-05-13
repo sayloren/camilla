@@ -160,17 +160,20 @@ def collect_datasets(file_pos,file_neg,file_test):
     seq_neg = select_negatives(file_neg,seq_pos)
 
     # subsample the positive sequences in order to get the same number of pos
-    # as there are neg
-    collect = []
-    num_pos = len(seq_neg)-len(seq_pos)
-    for i in range(num_pos):
-        collect.append(seq_2.sample(1))
-    sample_pos = pd.concat(collect)
+    # as there are neg - this actually ends up giving me way to many positive samples
+    # collect = []
+    # num_pos = len(seq_neg)-len(seq_pos)
+    # for i in range(num_pos):
+    #     collect.append(seq_pos.sample(1))
+    # sample_pos = pd.concat(collect)
 
     # concat pos and neg seq together
-    seq_all = pd.concat([seq_pos,seq_neg,sample_pos])
+    seq_all = pd.concat([seq_pos,seq_neg])#,sample_pos
 
     # get training and test sequences
     seq_train,seq_hold = make_training_and_holdout(seq_all)
 
     return seq_train,seq_hold,seq_test
+
+if __name__ == "__main__":
+    main()

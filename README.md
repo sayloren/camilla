@@ -27,7 +27,7 @@ conda install --yes --file requirements.txt
 ##### To run neural net
 ```
 cd <~/camilla/nn/>
-python -m 
+python -m
 ```
 
 ##### To run sort tests
@@ -40,3 +40,6 @@ python -m pytest -v test/run_tests.py
 
 ##### Graphs for Seq Weight/Bias relations over Epochs
 ![a](/images/Weights-biases-seq.png)
+
+##### Graphs for Training vs Validation Error
+![a](/images/Error-seq.png)

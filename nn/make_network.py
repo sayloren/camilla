@@ -1,22 +1,24 @@
 import numpy as np
 import pandas as pd
+from sklearn.metrics import mean_squared_error
 
 # make network structure
 class NeuralNetwork(object):
+    '''
+    initialze the network, pass in a list the length of layers the
+    network should have, with each value as the number of nodes in that layer
+    the baises and weights are the same dimensions as the network,
+    weights are centered at 0 with a spread of .01
+    '''    # set random seed
     np.random.seed(10)
 
+    # size argument - scale
+    # initiaze the neurons, layers, and their corresponding biases and weights
     def __init__(self,neurons):
-        '''
-        initialze the network, pass in a list the length of layers the
-        network should have, with each value as the number of nodes in that layer
-        the baises and weights are the same dimensions as the network,
-        weights are centered at 0 with a spread of .01
-        '''
-        self.neurons = neurons # number of neurons
-        self.layers = len(neurons) # number of layers to make
+        self.neurons = neurons
+        self.layers = len(neurons)
 
-        # size argument - scale
-        self.biases = [np.random.randn(i, 1) for i in neurons[1:]] # column of random values for each non-input layer
+        self.biases = [np.random.randn(i) for i in neurons[1:]]
         # matrix for each non-input layer, output x layer dimensions
         self.weights = [np.random.randn(i, j) for i, j in zip(neurons[:-1], neurons[1:])]
 
@@ -33,13 +35,12 @@ class NeuralNetwork(object):
 
         # for each pair of weight and bias, mult by weight, add bias, then apply actiavation function
         for w,b in zip(self.weights,self.biases):
-
             # dot product of the weight at that node and the x, adding the bias
             product = np.dot(x, w)+b
             products.append(product)
 
             # apply activation function, here sigmiod
-            activation = sigmoid(product).round(3)
+            activation = sigmoid(product).round(2)
             outputs.append(activation)
 
             # new x is now the output of the activation
@@ -100,67 +101,63 @@ class NeuralNetwork(object):
         each training step first feedfowards, then backpropogates the error
         those values are used to modify the weight and biases in place
         '''
-        # for each x,y pair
-        for i,j in zip(x,y):
+        collect_outputs = []
 
-            # run feed forward
-            outputs,products = self.feed_forward(i)
+        # for each pair in input and expected output
+        for x_i,y_i in zip(x,y):
 
-            # get mean square error for the output of the feed foward and the actual y
-            mean_sq_error = mean_squared_error(j,outputs[-1])
+            # feedforward
+            outputs,products = self.feed_forward(x_i)
+            collect_outputs.append(outputs[-1])
 
-            # if the sum of the actual is equal to the predicted, break
-            if sum(j) == sum(outputs[-1]):
-                break
+            # back prop
+            weight_delta,bias_delta = self.backward_propogation(x_i,y_i,outputs,products)
 
-            # run back prop
-            weight_delta,bias_delta = self.backward_propogation(i,j,outputs,products)
-
-            # update the weights and biases
+            # update biases and weights
             for (w,b,dw,db) in zip(self.weights,self.biases,weight_delta,bias_delta):
                 b-=learning_rate*db
                 w-=learning_rate*((dw.T/self.layers)) # normalized
-        return mean_sq_error
+        return collect_outputs
 
     def gradient_descent(self,x,y,epochs,learning_rate):
         '''
         for the number of epochs, run the training step, each time descending
         further down the gradient
         '''
-
-        # shuffle the data sets by index
+        # shuffle the indeces of the training data set
         shuffle_index = np.random.permutation(len(x))
 
-        # make a 70:30 cutoff for training and validation sets
-        cutoff = int(len(df_shuffle)*.7)
+        # make cuttoff for test and validation sets
+        cutoff = int(len(shuffle_index)*.7)
+        train_index = shuffle_index[:cutoff]
+        hold_index = shuffle_index[cutoff:]
 
-        # seperate train and hold by index
-        train_index = df_shuffle[:cutoff]
-        hold_index = df_shuffle[cutoff:]
+        # initiate error collection for train and validation
+        error_list_train = []
+        error_list_valid = []
+        previous_out = []
 
-        # initialize list for collecting error
-        error_list = []
-
-        # the length of the list from which to check for convergence
-        test_len = 10
-
-        # run the training step for number of epochs and collect error at each
+        # the number of elements in the list to check for convergence
+        test_len = 100
         for i in range(epochs):
 
-            # run on test and hold out set
-            error_test = self.training_step(x[train_index],y[train_index],learning_rate)
-            error_hold = self.training_step(x[hold_index],y[hold_index],learning_rate)
-            error_list.append(error_hold)
+            # training
+            out_train = self.training_step(x[train_index],y[train_index],learning_rate)
+            out_valid = self.training_step(x[hold_index],y[hold_index],learning_rate)
 
-            # if the average of the last n elements is the same as the last element, has converged
-            if len(error_list) < test_len:
+            # collect errors
+            error_list_valid.append(mean_squared_error(y[hold_index],out_valid))
+            error_list_train.append(mean_squared_error(y[train_index],out_train))
+
+            # if there is convergence, leave the loop
+            if len(error_list_valid) < test_len:
                 pass
-            elif sum(error_list[-test_len:])/test_len == error_list[-1]:
+            elif sum(error_list_valid[-test_len:])/test_len == error_list_valid[-1]:
                 pass
             else:
                 print('Converged after {0} epochs'.format(i))
                 break
-        return error_list,i
+        return error_list_train,error_list_valid,i
 
 def sigmoid(s):
     '''
@@ -173,3 +170,6 @@ def sigmoid_derivative(s):
     derivative of sigmoid
     '''
     return sigmoid(np.float64(s)) * (1 - sigmoid(np.float64(s)))
+
+if __name__ == "__main__":
+    main()

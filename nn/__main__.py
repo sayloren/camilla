@@ -3,9 +3,10 @@ Script to call all the others
 '''
 from .read_data import collect_datasets
 from .make_network import NeuralNetwork
-from .make_graphs import graph_learning_rate
+from .make_graphs import graph_learning_rate,graph_vary_params,graph_weight_bias_relation
 import numpy as np
 import pandas as pd
+from sklearn.metrics import roc_curve, auc
 
 def get_args():
     parser = argparse.ArgumentParser(description="Description")
@@ -13,6 +14,7 @@ def get_args():
 
 def evaluate_identity(y,p):
     '''
+
     '''
     best_case=sum(y==y)
     evaluate=sum(y==p)/best_case
@@ -44,8 +46,8 @@ def main():
 
     # run on training
     NN = NeuralNetwork(my_neurons)
-    error_list,epochs_run = NN.gradient_descent(x,y,epochs,learning_rate)
-    print('final error: {0}'.format(error_list[-1]))
+    error_train,error_valid,epochs_run = NN.gradient_descent(x,y,epochs,learning_rate)
+    print('train error: {0}, validation error: {1}'.format(error_train[-1],error_valid[-1]))
 
     # run on test, make prediction on probabilty of binding, print to
     # file with original sequence
@@ -56,7 +58,7 @@ def main():
     pd_predict.to_csv('probabilities.txt',sep='\t',header=False,index=False)
 
     # plot
-    graph_learning_rate(epochs_run,error_list)
+    graph_learning_rate(epochs_run,error_train,error_valid)
 
     # cross-validation experiments
     # learning_rates = [5,10,25,50,75,100]
@@ -79,6 +81,8 @@ def main():
     # pd_params = pd.DataFrame(collect)
     # pd_params.columns = ['layer_num','epochs','epochs_run','learning_rate','final_error','ave_prob','std_prob','fpr','tpr']
     # pd_params.to_csv('params.txt',sep='\t',header=True,index=False)
+    # graph_vary_params(pd_params)
+    # graph_weight_bias_relation(NN)
 
 if __name__ == "__main__":
     main()
