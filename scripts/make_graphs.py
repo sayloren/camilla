@@ -1,9 +1,8 @@
-half = int(epochs/2)
-quart = int(half/2)
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.gridspec as gridspec
-
+import pandas as pd
+import pathlib
 
 def graph_learning_rate(epochs,error):
     '''
@@ -136,7 +135,6 @@ def graph_mult_params(pd_params_two):
     sns.heatmap(group_params,ax=ax3)
     ax3.title.set_text('Learning Rate = 1 x AUC')
 
-    import pathlib
     outdir = pathlib.Path('images')
     outfile = outdir / "Learningrate-error.png"
     outdir.mkdir(parents=True, exist_ok=True)

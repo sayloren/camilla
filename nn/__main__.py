@@ -1,9 +1,11 @@
 '''
 Script to call all the others
 '''
-from read_data import collect_datasets
-from make_network import NeuralNetwork
-from make_graphs import graph_learning_rate
+from .read_data import collect_datasets
+from .make_network import NeuralNetwork
+from .make_graphs import graph_learning_rate
+import numpy as np
+import pandas as pd
 
 def get_args():
     parser = argparse.ArgumentParser(description="Description")
@@ -57,26 +59,26 @@ def main():
     graph_learning_rate(epochs_run,error_list)
 
     # cross-validation experiments
-    learning_rates = [5,10,25,50,75,100]
-    epochs = [10,100,1000]
-    hidden = [[68,34,17,9,3,1],[68,68,34,34,17,17,9,9,3,3,1],[68,68,68,34,34,34,17,17,17,9,9,9,3,3,3,1]]
-    x = np.array(pd.DataFrame(seq_train.binary.values.tolist()))
-    y = np.array(pd.DataFrame(seq_train.probability.values.tolist()))
-    test = np.array(pd.DataFrame(seq_test.binary.values.tolist()))
+    # learning_rates = [5,10,25,50,75,100]
+    # epochs = [10,100,1000]
+    # hidden = [[68,34,17,9,3,1],[68,68,34,34,17,17,9,9,3,3,1],[68,68,68,34,34,34,17,17,17,9,9,9,3,3,3,1]]
+    # x = np.array(pd.DataFrame(seq_train.binary.values.tolist()))
+    # y = np.array(pd.DataFrame(seq_train.probability.values.tolist()))
+    # test = np.array(pd.DataFrame(seq_test.binary.values.tolist()))
 
-    collect = []
-    for l in learning_rates:
-        for e in epochs:
-            for h in hidden:
-                NN = NeuralNetwork(h)
-                error_list,epochs_run = NN.gradient_descent(x,y,e,l)
-                predictions,_ = NN.feed_forward(x)
-                fpr,tpr,_=roc_curve(y,predictions[-1])
-                roc_auc=auc(fpr, tpr)
-                collect.append([len(h),e,epochs_run,l,error_list[-1],pd_p['probability'].mean(),pd_p['probability'].std(),fpr,tpr])
-    pd_params = pd.DataFrame(collect)
-    pd_params.columns = ['layer_num','epochs','epochs_run','learning_rate','final_error','ave_prob','std_prob','fpr','tpr']
-    pd_params.to_csv('params.txt',sep='\t',header=True,index=False)
+    # collect = []
+    # for l in learning_rates:
+    #     for e in epochs:
+    #         for h in hidden:
+    #             NN = NeuralNetwork(h)
+    #             error_list,epochs_run = NN.gradient_descent(x,y,e,l)
+    #             predictions,_ = NN.feed_forward(x)
+    #             fpr,tpr,_=roc_curve(y,predictions[-1])
+    #             roc_auc=auc(fpr, tpr)
+    #             collect.append([len(h),e,epochs_run,l,error_list[-1],pd_p['probability'].mean(),pd_p['probability'].std(),fpr,tpr])
+    # pd_params = pd.DataFrame(collect)
+    # pd_params.columns = ['layer_num','epochs','epochs_run','learning_rate','final_error','ave_prob','std_prob','fpr','tpr']
+    # pd_params.to_csv('params.txt',sep='\t',header=True,index=False)
 
 if __name__ == "__main__":
     main()

@@ -26,12 +26,13 @@ conda install --yes --file requirements.txt
 
 ##### To run neural net
 ```
-python -m nn
+cd <~/camilla/nn/>
+python -m 
 ```
 
 ##### To run sort tests
 ```
-python -m pytest
+python -m pytest -v test/run_tests.py
 ```
 
 ##### Graphs for Seq Learning Rate x other params

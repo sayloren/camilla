@@ -1,12 +1,15 @@
 '''
 Script to call all the others
 '''
-from read_data import collect_datasets
-from make_network import NeuralNetwork
-from make_graphs import graph_learning_rate
+from .read_data import collect_datasets
+from .make_network import NeuralNetwork
+from .make_graphs import graph_learning_rate
+import argparse
 
 def get_args():
     parser = argparse.ArgumentParser(description="Description")
+    parser.add_argument("-e","--epochs",type=int,default="1000",help='total epochs to run')
+    parser.add_argument("-l","--learningrate",type=int,default="1",help='learning rate')
     return parser.parse_args()
 
 def evaluate_identity(y,p):
@@ -32,8 +35,8 @@ def main():
     # elements encoding each
     # one output value
     my_neurons = [68,34,17,9,3,1]
-    epochs = 1000
-    learning_rate = .001
+    epochs = args.epochs
+    learning_rate = args.learningrate
 
     # get the columns from the panda into the correct format - np array
     x = np.array(pd.DataFrame(seq_train.binary.values.tolist()))

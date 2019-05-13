@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 # make network structure
 class NeuralNetwork(object):
     np.random.seed(10)
