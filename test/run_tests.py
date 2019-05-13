@@ -50,8 +50,8 @@ def test_sequence_encoding():
         'yeast-upstream-1k-negative.fa',
         'rap1-lieb-test.txt')
 
-    seq_test['reverse_binary'] = [make_binary_sequence(seq) for seq in pd_seq['sequence']]
-    assert seq_test['sequence']==seq_test['rev_binary']
+    seq_hold['reverse_binary'] = [make_binary_sequence(seq) for seq in seq_hold['sequence']]
+    assert seq_hold['sequence']==seq_hold['rev_binary']
 
 if __name__ == "__main__":
     main()
