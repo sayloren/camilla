@@ -51,9 +51,8 @@ def test_sequence_encoding():
         'rap1-lieb-test.txt')
 
     top_seq = seq_hold.head()
-    top_seq['reverse_binary'] = [reverse_binary_dictionary(seq) for seq in top_seq['binary']]
-    top_seq['tf']=top_seq['sequence']==top_seq['rev_binary']
-    assert top_seq['tf'].all() == True
+    top_seq['rev_binary'] = [reverse_binary_dictionary(seq) for seq in top_seq['binary']]
+    assert all(e in top_seq['sequence'].tolist() for e in top_seq['rev_binary'].tolist())
 
 if __name__ == "__main__":
     main()
