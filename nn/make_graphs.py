@@ -151,7 +151,7 @@ def graph_weight_bias_relation(NN,file):
         x=NN.weights[i].reshape(int(tot_w/2),2)
         y=NN.biases[i].reshape(len(NN.biases[i]),1)
         sns.kdeplot(x, y, cmap=cmap, shade=True, cut=5, ax=ax)
-        ax.title.set_text('Epoch: {0}'.format(i))
+        ax.title.set_text('Layer: {0}'.format(i))
         ax.set_xlabel('weights')
         ax.set_ylabel('biases')
         ax.set(xlim=(-3, 3), ylim=(-3, 3))

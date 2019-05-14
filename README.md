@@ -35,14 +35,14 @@ python -m
 python -m pytest -v test/run_tests.py
 ```
 
-##### Graphs for Seq Learning Rate x other params
-![a](/images/Learningrate-error-seq.png)
-
-##### Graphs for Seq Weight/Bias relations over Epochs
+##### Graphs for Sequences Weight/Bias Relations Between Layers
 ![a](/images/WB.png)
 
 ##### Graphs for Training vs Validation Error
 ![a](/images/MSE.png)
 
-##### Graphs for ROC
+##### Graphs for Receiver operating characteristic
 ![a](/images/ROC.png)
+
+##### Graphs for Sequence Learning Rate vs Other Parameters
+![a](/images/Learningrate-error-seq.png)
