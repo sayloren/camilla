@@ -53,9 +53,9 @@ def main():
     # graph_learning_rate(epochs_run,error_train,error_valid,'{0}-{1}-{2}'.format(learning_rate,epochs,len(my_neurons)))
 
     # cross-validation experiments
-    learning_rates = [.001,.01,.1,1,5,10,25,50,75,100]
-    epochs = [10,100,1000,10000,100000]
-    hidden = [[68,34,1],[68,34,17,9,3,1],[68,68,34,34,17,17,9,9,3,3,1],[68,68,68,68,68,34,34,34,34,34,17,17,17,9,9,9,3,3,3,1]]
+    learning_rates = [.001,.01,.1,1]
+    epochs = [10,100,1000,10000]
+    hidden = [[68,34,1],[68,34,17,9,3,1],[68,68,68,68,68,34,34,34,34,34,17,17,17,9,9,9,3,3,3,1]]
 
     # collect params out
     collect = []
@@ -69,9 +69,9 @@ def main():
                 predictions,_ = NN.feed_forward(x)
                 fpr,tpr,_=roc_curve(y,predictions[-1])
                 roc_auc=auc(fpr, tpr)
-                graph_learning_rate(epochs_run,error_train_list,error_valid_list,'{0}-{1}-{2}'.format(l,e,len(h)))
-                if len(h) > 17:
-                    graph_weight_bias_relation(NN,'{0}-{1}-{2}'.format(l,e,len(h)))
+                # graph_learning_rate(epochs_run,error_train_list,error_valid_list,'{0}-{1}-{2}'.format(l,e,len(h)))
+                # if len(h) > 17:
+                    # graph_weight_bias_relation(NN,'{0}-{1}-{2}'.format(l,e,len(h)))
                 collect.append([len(h),e,epochs_run,l,error_train_list[-1],error_valid_list[-1],fpr,tpr])#,pd_p['probability'].mean(),pd_p['probability'].std()
     pd_params = pd.DataFrame(collect)
     pd_params.columns = ['layer_num','epochs','epochs_run','learning_rate','train_error','valid_error','fpr','tpr']#,'ave_prob','std_prob'

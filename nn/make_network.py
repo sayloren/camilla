@@ -138,7 +138,7 @@ class NeuralNetwork(object):
         previous_out = []
 
         # the number of elements in the list to check for convergence
-        test_len = 10000
+        test_len = 1000
         for i in range(epochs):
 
             # training

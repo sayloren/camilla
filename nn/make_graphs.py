@@ -46,6 +46,9 @@ def graph_learning_rate(epochs_run,error_list_train,error_list_valid,file):
     plt.close()
 
 def graph_vary_params(pd_params_two,file):
+    '''
+    make graphs of how the parameters vary
+    '''
     sns.set_style('ticks')
     sns.set_palette("husl")
 
@@ -129,7 +132,6 @@ def graph_vary_params(pd_params_two,file):
     sns.heatmap(group_params,ax=ax3)
     ax3.title.set_text('Learning Rate = 1 x AUC')
 
-    import pathlib
     outdir = pathlib.Path('images')
     outfile = outdir / "Learningrate-error.png"
     outdir.mkdir(parents=True, exist_ok=True)
@@ -137,6 +139,9 @@ def graph_vary_params(pd_params_two,file):
     plt.close()
 
 def graph_weight_bias_relation(NN,file):
+    '''
+    graph how the weights and biases change in the different layers (mostly of size 68)
+    '''
     sns.set(style="dark")
     f, axes = plt.subplots(3, 3, figsize=(9, 9), sharex=True, sharey=True)
     index_nn = [0,1,2,3,4,5,6,7,8]
@@ -153,6 +158,25 @@ def graph_weight_bias_relation(NN,file):
     f.tight_layout()
     outdir = pathlib.Path('images')
     outfile = outdir / "Weights-biases-{0}.png".format(file)
+    outdir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(str(outfile),format='png')
+    plt.close()
+
+def graph_roc(fpr,tpr,file):
+    '''
+    roc auc curves
+    '''
+    sns.set_style('ticks')
+    sns.set_palette("husl")
+    plt.plot(fpr,tpr)
+    plt.suptitle('Graph of ROC',label='roc')
+    plt.title('AUC = {0}'.format(roc_auc))
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    # print to folder images
+    sns.despine()
+    outdir = pathlib.Path('images')
+    outfile = outdir / "ROC_{0}.png".format(file)
     outdir.mkdir(parents=True, exist_ok=True)
     plt.savefig(str(outfile),format='png')
     plt.close()
