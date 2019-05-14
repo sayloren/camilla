@@ -45,4 +45,4 @@ python -m pytest -v test/run_tests.py
 ![a](/images/ROC.png)
 
 ##### Graphs for Sequence Learning Rate vs Other Parameters
-![a](/images/Learningrate-error-seq.png)
+![a](/images/Learningrate-error.png)
