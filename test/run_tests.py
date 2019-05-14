@@ -4,6 +4,14 @@ import pytest
 from nn.make_network import NeuralNetwork
 from nn.read_data import collect_datasets
 
+def evaluate_identity(y,p):
+    '''
+    check how often the predictions align with the actual - for use in 838
+    '''
+    best_case=sum(y==y)
+    evaluate=sum(y==p)/best_case
+    return evaluate
+
 def run_auto_encoder():
     '''
     8 3 8 auto encoder
