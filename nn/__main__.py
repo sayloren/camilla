@@ -31,58 +31,60 @@ def main():
         'yeast-upstream-1k-negative.fa',
         'rap1-lieb-test.txt')
 
-    # set up parameters
-    # 17x4 for the bp length of the sequences x the number of
-    # elements encoding each
-    # one output value
-    my_neurons = [68,34,17,9,3,1]
-    epochs = 1000
-    learning_rate = .001
+    # # set up parameters
+    # # 17x4 for the bp length of the sequences x the number of
+    # # elements encoding each
+    # # one output value
+    # my_neurons = [68,34,17,9,3,1]
+    # epochs = 100000
+    # learning_rate = .001
 
     # get the columns from the panda into the correct format - np array
     x = np.array(pd.DataFrame(seq_train.binary.values.tolist()))
     y = np.array(pd.DataFrame(seq_train.probability.values.tolist()))
     test = np.array(pd.DataFrame(seq_test.binary.values.tolist()))
 
-    # run on training
-    NN = NeuralNetwork(my_neurons)
-    error_train,error_valid,epochs_run = NN.gradient_descent(x,y,epochs,learning_rate)
-    print('train error: {0}, validation error: {1}'.format(error_train[-1],error_valid[-1]))
-
-    # run on test, make prediction on probabilty of binding, print to
-    # file with original sequence
-    predictions,_ = NN.feed_forward(test)
-    pd_p = pd.DataFrame(predictions[-1])
-    pd_p.columns = ['probability']
-    pd_predict = pd_p.join(seq_test['sequence'])
-    pd_predict.to_csv('probabilities.txt',sep='\t',header=False,index=False)
-
-    # plot
-    graph_learning_rate(epochs_run,error_train,error_valid)
+    # # run on training
+    # NN = NeuralNetwork(my_neurons)
+    # error_train,error_valid,epochs_run = NN.gradient_descent(x,y,epochs,learning_rate)
+    # print('train error: {0}, validation error: {1}'.format(error_train[-1],error_valid[-1]))
+    #
+    # # plot
+    # graph_learning_rate(epochs_run,error_train,error_valid,'{0}-{1}-{2}'.format(learning_rate,epochs,len(my_neurons)))
 
     # cross-validation experiments
-    # learning_rates = [5,10,25,50,75,100]
-    # epochs = [10,100,1000]
-    # hidden = [[68,34,17,9,3,1],[68,68,34,34,17,17,9,9,3,3,1],[68,68,68,34,34,34,17,17,17,9,9,9,3,3,3,1]]
-    # x = np.array(pd.DataFrame(seq_train.binary.values.tolist()))
-    # y = np.array(pd.DataFrame(seq_train.probability.values.tolist()))
-    # test = np.array(pd.DataFrame(seq_test.binary.values.tolist()))
+    learning_rates = [.001,.01,.1,1,5,10,25,50,75,100]
+    epochs = [10,100,1000,10000,100000]
+    hidden = [[68,34,1],[68,34,17,9,3,1],[68,68,34,34,17,17,9,9,3,3,1],[68,68,68,68,68,34,34,34,34,34,17,17,17,9,9,9,3,3,3,1]]
 
-    # collect = []
-    # for l in learning_rates:
-    #     for e in epochs:
-    #         for h in hidden:
-    #             NN = NeuralNetwork(h)
-    #             error_list,epochs_run = NN.gradient_descent(x,y,e,l)
-    #             predictions,_ = NN.feed_forward(x)
-    #             fpr,tpr,_=roc_curve(y,predictions[-1])
-    #             roc_auc=auc(fpr, tpr)
-    #             collect.append([len(h),e,epochs_run,l,error_list[-1],pd_p['probability'].mean(),pd_p['probability'].std(),fpr,tpr])
-    # pd_params = pd.DataFrame(collect)
-    # pd_params.columns = ['layer_num','epochs','epochs_run','learning_rate','final_error','ave_prob','std_prob','fpr','tpr']
-    # pd_params.to_csv('params.txt',sep='\t',header=True,index=False)
-    # graph_vary_params(pd_params)
-    # graph_weight_bias_relation(NN)
+    # collect params out
+    collect = []
+
+    # iterate through parameters
+    for l in learning_rates:
+        for e in epochs:
+            for h in hidden:
+                NN = NeuralNetwork(h)
+                error_train_list,error_valid_list,epochs_run = NN.gradient_descent(x,y,e,l)
+                predictions,_ = NN.feed_forward(x)
+                fpr,tpr,_=roc_curve(y,predictions[-1])
+                roc_auc=auc(fpr, tpr)
+                graph_learning_rate(epochs_run,error_train_list,error_valid_list,'{0}-{1}-{2}'.format(l,e,len(h)))
+                if len(h) > 17:
+                    graph_weight_bias_relation(NN,'{0}-{1}-{2}'.format(l,e,len(h)))
+                collect.append([len(h),e,epochs_run,l,error_train_list[-1],error_valid_list[-1],fpr,tpr])#,pd_p['probability'].mean(),pd_p['probability'].std()
+    pd_params = pd.DataFrame(collect)
+    pd_params.columns = ['layer_num','epochs','epochs_run','learning_rate','train_error','valid_error','fpr','tpr']#,'ave_prob','std_prob'
+    pd_params.to_csv('params.txt',sep='\t',header=True,index=False)
+    graph_vary_params(pd_params)
+
+    # # run on test, make prediction on probabilty of binding, print to
+    # # file with original sequence
+    # predictions,_ = NN.feed_forward(test)
+    # pd_p = pd.DataFrame(predictions[-1])
+    # pd_p.columns = ['probability']
+    # pd_predict = pd_p.join(seq_test['sequence'])
+    # pd_predict.to_csv('probabilities.txt',sep='\t',header=False,index=False)
 
 if __name__ == "__main__":
     main()

@@ -39,7 +39,10 @@ python -m pytest -v test/run_tests.py
 ![a](/images/Learningrate-error-seq.png)
 
 ##### Graphs for Seq Weight/Bias relations over Epochs
-![a](/images/Weights-biases-seq.png)
+![a](/images/Screen Shot 2019-05-14 at 13.00.31)
 
 ##### Graphs for Training vs Validation Error
-![a](/images/Error-seq.png)
+![a](/images/Screen Shot 2019-05-14 at 13.00.22)
+
+##### Graphs for ROC
+![a](/images/Screen Shot 2019-05-14 at 13.00.26)

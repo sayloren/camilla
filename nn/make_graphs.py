@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.gridspec as gridspec
 import pathlib
+import numpy as np
 
-def graph_learning_rate(epochs_run,error_list_train,error_list_valid):
+def graph_learning_rate(epochs_run,error_list_train,error_list_valid,file):
     '''
     make line plots for the learning rate x epochs
     '''
@@ -39,12 +40,12 @@ def graph_learning_rate(epochs_run,error_list_train,error_list_valid):
     # print to folder images
     sns.despine()
     outdir = pathlib.Path('images')
-    outfile = outdir / "Error.png"
+    outfile = outdir / "Error_{0}.png".format(file)
     outdir.mkdir(parents=True, exist_ok=True)
     plt.savefig(str(outfile),format='png')
     plt.close()
 
-def graph_vary_params(pd_params_two):
+def graph_vary_params(pd_params_two,file):
     sns.set_style('ticks')
     sns.set_palette("husl")
 
@@ -135,7 +136,7 @@ def graph_vary_params(pd_params_two):
     plt.savefig(str(outfile),format='png')
     plt.close()
 
-def graph_weight_bias_relation(NN):
+def graph_weight_bias_relation(NN,file):
     sns.set(style="dark")
     f, axes = plt.subplots(3, 3, figsize=(9, 9), sharex=True, sharey=True)
     index_nn = [0,1,2,3,4,5,6,7,8]
@@ -151,7 +152,7 @@ def graph_weight_bias_relation(NN):
         ax.set(xlim=(-3, 3), ylim=(-3, 3))
     f.tight_layout()
     outdir = pathlib.Path('images')
-    outfile = outdir / "Weights-biases.png"
+    outfile = outdir / "Weights-biases-{0}.png".format(file)
     outdir.mkdir(parents=True, exist_ok=True)
     plt.savefig(str(outfile),format='png')
     plt.close()
