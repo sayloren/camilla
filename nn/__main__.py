@@ -13,7 +13,9 @@ def get_args():
     parser = argparse.ArgumentParser(description="Description")
     parser.add_argument("-e", "--epochs",type=int,help='number of epochs to run - typically 1000')
     parser.add_argument("-l", "--learn",type=float,help='learning rate - typically .01')
-    parser.add_argument("-n","--neurons",default="68, 34, 1",nargs='+',help='number of neurons per layer, note: number of layers will be inferred, so you need at least 3')
+    parser.add_argument("-n","--neurons",default="68, 34, 1",nargs='+',help='number of neurons'
+        'per layer, if want to print out in the graphs correctly, need to be even numbers,'
+        'note: number of layers will be inferred, so you need at least 3')
     return parser.parse_args()
 
 def main():
@@ -78,7 +80,7 @@ def main():
         # cross-validation experiments
         learning_rates = [.001,.01,.1,1]
         epochs = 1000
-        hidden = [[68,34,1],[68,34,17,9,3,1],[68,68,68,68,68,34,34,34,34,34,17,17,17,9,9,9,3,3,3,1]]
+        hidden = [[68,34,1],[68,34,18,10,4,1],[68,68,68,68,68,34,34,34,34,34,18,18,18,10,10,10,4,4,4,1]]
 
         # collect params out
         collect = []
@@ -110,7 +112,7 @@ def main():
                 graph_roc(fpr,tpr,file_labels,roc_auc)
 
                 # if sufficently many layers, get the distributions of biases and weights in those layers
-                if len(h) > 17:
+                if len(h) > 12:
                     graph_weight_bias_relation(NN,file_labels)
 
                 # collect all the parameters

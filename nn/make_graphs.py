@@ -56,7 +56,7 @@ def graph_learning_rate(epochs_run,error_list_train,error_list_valid,file):
     plt.savefig(str(outfile),format='png')
     plt.close()
 
-def graph_vary_params(pd_params_two,file):
+def graph_vary_params(pd_params_two):
     '''
     make graphs of how the parameters vary against the train
     and validation errors
@@ -76,7 +76,7 @@ def graph_vary_params(pd_params_two,file):
     # format data for first subplot
     # learning rate average
     heat_params = pd_params_two[['learning_rate','train_error','valid_error']]
-    group_params = heat_params.groupby('learning_rate')['final_error','valid_error'].mean().reset_index()
+    group_params = heat_params.groupby('learning_rate')['train_error','valid_error'].mean().reset_index()
     group_params.set_index('learning_rate',drop=True,inplace=True)
     ax1 = plt.subplot(gs[0,0])
     sns.heatmap(group_params,ax=ax1)
@@ -85,7 +85,7 @@ def graph_vary_params(pd_params_two,file):
 
     # second subplot - number of layers
     heat_params = pd_params_two[['layer_num','train_error','valid_error']]
-    group_params = heat_params.groupby('layer_num')['final_error','valid_error'].mean().reset_index()
+    group_params = heat_params.groupby('layer_num')['train_error','valid_error'].mean().reset_index()
     group_params.set_index('layer_num',drop=True,inplace=True)
     ax2 = plt.subplot(gs[0,1])
     sns.heatmap(group_params,ax=ax2)
@@ -94,7 +94,7 @@ def graph_vary_params(pd_params_two,file):
 
     # third subplot - number of epochs run before convergence
     heat_params = pd_params_two[['epochs_run','train_error','valid_error']]
-    group_params = heat_params.groupby('epochs_run')['final_error','valid_error'].mean().reset_index()
+    group_params = heat_params.groupby('epochs_run')['train_error','valid_error'].mean().reset_index()
     group_params.set_index('epochs_run',drop=True,inplace=True)
     ax3 = plt.subplot(gs[0,2])
     sns.heatmap(group_params,ax=ax3)
@@ -178,7 +178,7 @@ def graph_roc(fpr,tpr,file,roc_auc):
     plt.title('AUC = {0}'.format(roc_auc))
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    
+
     # print to folder images
     sns.despine()
     outdir = pathlib.Path('images')
